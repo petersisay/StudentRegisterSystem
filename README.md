@@ -32,6 +32,9 @@ This project demonstrates **MVC architecture**, **database connectivity**, and *
 ```
 StudentRegistrationApp
 │
+├── database
+│   └── schema.sql
+│
 ├── src
 │   └── main
 │       ├── java
@@ -76,32 +79,40 @@ StudentRegistrationApp
 
 ## 🗄️ Database Setup (MySQL)
 
-### 1️⃣ Create Database
+### 1️⃣ Initialize Database Schema
 
-```sql
-CREATE DATABASE studentdb;
-USE studentdb;
+You can create the database and table automatically using the provided schema script:
+
+```bash
+mysql -u root -p < database/schema.sql
 ```
 
-### 2️⃣ Create Table
+When prompted, enter your MySQL root password.
+
+> **Note:** The schema script uses `CREATE TABLE IF NOT EXISTS`, which creates the table if missing but does not alter or update an existing incompatible table definition.
+
+Alternatively, you can run the SQL statements manually in your MySQL client:
 
 ```sql
-CREATE TABLE students (
+CREATE DATABASE IF NOT EXISTS student_db;
+USE student_db;
+
+CREATE TABLE IF NOT EXISTS students (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    email VARCHAR(100),
-    year INT
-);
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    year INT NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 ```
 
-### 3️⃣ Update Database Credentials
+### 2️⃣ Update Database Credentials
 
-Edit `DBConnection.java`:
+Edit `DBConnection.java` to match your local MySQL configuration:
 
 ```java
-private static final String URL = "jdbc:mysql://localhost:3306/studentdb";
+private static final String URL = "jdbc:mysql://localhost:3306/student_db";
 private static final String USER = "root";
-private static final String PASSWORD = "your_password";
+private static final String PASSWORD = "your_mysql_password";
 ```
 
 ---
